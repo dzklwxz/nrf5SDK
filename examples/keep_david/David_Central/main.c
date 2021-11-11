@@ -120,7 +120,7 @@ uint16_t test_data_len=0;
 
 
 //Peter add start
-uint8_t id = 0;  //8个设备对应id
+uint8_t id = 0;  //device ID
 uint8_t user_conn_state[8];  //连接上从机标志
 uint16_t user_conn_handle[8];  //连接上从机句柄
 uint8_t user_req_flag = 0;  //需要发送数据给从机标志
@@ -412,27 +412,27 @@ static void data_print_out()
 			
 			if(length==0x1F) 			//length 31  one package 
 			{
-				pos_x=1;
+				pos_x=0;
 			}
 			else if (length==0x3E)//length 62  two package
 			{
-				pos_x=2;
+				pos_x=1;
 			}
 			else if (length==0x5D)//length 93  three package
 			{
-				pos_x=3;
+				pos_x=2;
 			}
 			else if (length==0x7C)//length 124 four package
 			{
-				pos_x=4;
+				pos_x=3;
 			}
 			else if (length==0x9B)//length 155 five package
 			{
-				pos_x=5;
+				pos_x=4;
 			}
 			else if (length==0xBA)//length 186 SIX package
 			{
-				pos_x=6;
+				pos_x=5;
 			}
 			else
 			{
@@ -440,27 +440,33 @@ static void data_print_out()
 				ret=NRF_ERROR_SDK_COMMON_ERROR_BASE;
 				APP_ERROR_CHECK(ret);
 			}
-				
-			//取数据包1-4 rtc时间
-			for( uint8_t i = 0; i < 1; i++ )
-			{
-				pos_x = i*38;
-				rtc_dev[i] |= pbuf[5 + 0];
-				rtc_dev[i] <<= 8;
-				rtc_dev[i] |= pbuf[5 + 1];
-				rtc_dev[i] <<= 8;
-				rtc_dev[i] |= pbuf[5 + 2];
-				rtc_dev[i] <<= 8;
-				rtc_dev[i] |= pbuf[5 + 3];
-			}
-			//打印设备编号
+		
+	    //打印设备编号
 			sprintf( data, "%d ", pbuf[9] );
-			data_len += 2;
+			data_len += 2;		
 			
 			//打印主机mtu本地时间
 			sprintf( data + data_len, "%010d ", rtc_1ms );
 			data_len += 11;
 			
+			//取数据包1-4 rtc时间
+			for( uint8_t i = 0; i < pos_x+1; i++ )
+			{
+				pos_x = i*31;
+				rtc_dev[i] |= pbuf[5 +pos_x+ 0];
+				rtc_dev[i] <<= 8;
+				rtc_dev[i] |= pbuf[5 +pos_x+ 1];
+				rtc_dev[i] <<= 8;
+				rtc_dev[i] |= pbuf[5 +pos_x+ 2];
+				rtc_dev[i] <<= 8;
+				rtc_dev[i] |= pbuf[5 +pos_x+ 3];
+				
+				sprintf( data + data_len, "%010d ", rtc_dev[i] );
+				data_len += 11;
+			}
+			
+			
+			/*
 			//打印从机mtu本地时间
 			for( uint8_t i = 0; i < 1; i ++ )
 			{
@@ -468,7 +474,7 @@ static void data_print_out()
 				sprintf( data + data_len, "%010d ", rtc_dev[i] );
 				data_len += 11;
 			}
-			
+			*/
 				//打印结束符
 			sprintf( data + data_len, "\r\n" );
 			data_len += 2;

@@ -129,7 +129,7 @@ NRF_BALLOC_DEF(m_balloc_AT_pool,40,30);
 NRF_QUEUE_DEF( uint8_t *, m_buf_queue, 20, NRF_QUEUE_MODE_NO_OVERFLOW );  //定义队列
 
 void ble_data_send_with_queue(void);
-
+void create_data(void);
 uint16_t sendlength = 0;
 uint8_t send_data_pack [200] = {0};
 //david add end 
@@ -147,7 +147,7 @@ uint8_t notify_enable;  //主机使能从机notify
 uint32_t m_len_sent;  //发送数据长度
 uint32_t m_cnt_5ms;  //发送数据计时
 //缓存数据填充位置计算变量
-#define DEVICE_ID        (4)  //id = 1-8
+#define DEVICE_ID        (1)  //id = 1-8
 #define DATA_HEAD_LEN 5  //一包数据头长度
 uint8_t x = 0;  //0-5
 uint8_t y = 0;  //0-3
@@ -206,6 +206,7 @@ uint8_t rtc_5ms;
 void app_timer_rtc_5ms_handler(void * p_context)
 {
 	rtc_5ms++;
+	create_data(); // create
 }
 
 //启动定时器
@@ -1095,7 +1096,7 @@ int main(void)
 	   // make_data_task();  //产生数据，38byte/5ms
 	  //  upload_data_task();  //发送数据，235byte/5ms  (5 + 38*6  + 2)  //包头5字节 + 数据228字节 + crc2字节
 	    //user_fifo_task();  //打印fifo中的log
-			create_data(); // create
+			
       idle_state_handle();
 			ble_data_send_with_queue();
     }
