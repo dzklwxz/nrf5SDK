@@ -394,7 +394,7 @@ static void nus_data_handler(ble_nus_evt_t * p_evt)
 	else if (p_evt->type == BLE_NUS_EVT_TX_RDY)
 	{
 			 //NRF_LOG_INFO("BLE_NUS_EVT_TX_RDY");
-			 ble_data_send_with_queue();
+			// ble_data_send_with_queue();
 	}
 }
 /**@snippet [Handling the data received over BLE] */
@@ -910,7 +910,8 @@ void ble_data_send_with_queue(void)
 				}
 			}
 			//the queue has less than 6 data package & the queue larger than one 
-			else if((nrf_queue_available_get(&m_buf_queue)>14)&&(nrf_queue_available_get(&m_buf_queue)<19))
+			//else if((nrf_queue_available_get(&m_buf_queue)>14)&&(nrf_queue_available_get(&m_buf_queue)<19))
+			else 
 			{
 				count = 0;
 				//left_val_count= nrf_queue_available_get(&m_buf_queue);
@@ -993,14 +994,15 @@ void create_data(void)
 				{
 					NRF_LOG_INFO("Drop");
 				}
+				/*
 				if(nrf_queue_available_get(&m_buf_queue)==19) // only add one node into queue
 				{
 					 err_code = nrf_queue_pop(&m_buf_queue, &pbuf);
 			     APP_ERROR_CHECK(err_code);
 						if(length==0)
-			{
-				NRF_LOG_ERROR("wrong data3");
-			}
+			 {
+				 NRF_LOG_ERROR("wrong data3");
+			 }
 					err_code = ble_nus_data_send(&m_nus, pbuf, &length, m_conn_handle);
 					if ( (err_code != NRF_ERROR_INVALID_STATE) && (err_code != NRF_ERROR_RESOURCES) &&
 							 (err_code != NRF_ERROR_NOT_FOUND) )
@@ -1014,6 +1016,7 @@ void create_data(void)
 					//free buf
 					nrf_balloc_free(&m_balloc_AT_pool, pbuf);
 				}
+				*/
 			}
 			else 
 			{
@@ -1093,7 +1096,8 @@ int main(void)
 	  //  upload_data_task();  //发送数据，235byte/5ms  (5 + 38*6  + 2)  //包头5字节 + 数据228字节 + crc2字节
 	    //user_fifo_task();  //打印fifo中的log
 			create_data(); // create
-        idle_state_handle();
+      idle_state_handle();
+			ble_data_send_with_queue();
     }
 }
 
