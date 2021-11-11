@@ -147,7 +147,7 @@ uint8_t notify_enable;  //主机使能从机notify
 uint32_t m_len_sent;  //发送数据长度
 uint32_t m_cnt_5ms;  //发送数据计时
 //缓存数据填充位置计算变量
-#define DEVICE_ID        (1)  //id = 1-8
+#define DEVICE_ID        (4)  //id = 1-8
 #define DATA_HEAD_LEN 5  //一包数据头长度
 uint8_t x = 0;  //0-5
 uint8_t y = 0;  //0-3
@@ -536,6 +536,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
             m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
             err_code = nrf_ble_qwr_conn_handle_assign(&m_qwr, m_conn_handle);
             APP_ERROR_CHECK(err_code);
+				   // clear_data();  //清空缓存
 				
 			err_code =  sd_ble_gap_tx_power_set(BLE_GAP_TX_POWER_ROLE_CONN,m_conn_handle,RADIO_TXPOWER_TXPOWER_Pos4dBm);
 			APP_ERROR_CHECK(err_code);
@@ -864,24 +865,28 @@ void ble_data_send_with_queue(void)
 	
 	if (retry)
 	{
-		if(sendlength==0)
+		if(sendlength!=0)
 		{
-			NRF_LOG_ERROR("wrong data1");
+			err_code = ble_nus_data_send(&m_nus, send_data_pack, &sendlength, m_conn_handle);
+			//NRF_LOG_INFO("Data2: %d", m_buf.p_data[0]);
+			if ( (err_code != NRF_ERROR_INVALID_STATE) && (err_code != NRF_ERROR_RESOURCES) &&
+					 (err_code != NRF_ERROR_NOT_FOUND) )
+			{
+					APP_ERROR_CHECK(err_code);
+			}
+			if (err_code == NRF_SUCCESS)
+			{
+				m_len_sent += sendlength;
+				memset(send_data_pack,0x00,200); //reset send_data_pack
+				sendlength=0;
+				retry = false;
+			}
 		}
-		err_code = ble_nus_data_send(&m_nus, send_data_pack, &sendlength, m_conn_handle);
-		//NRF_LOG_INFO("Data2: %d", m_buf.p_data[0]);
-		if ( (err_code != NRF_ERROR_INVALID_STATE) && (err_code != NRF_ERROR_RESOURCES) &&
-				 (err_code != NRF_ERROR_NOT_FOUND) )
+		else
 		{
-				APP_ERROR_CHECK(err_code);
+				retry = false;
 		}
-		if (err_code == NRF_SUCCESS)
-		{
-			m_len_sent += sendlength;
-			memset(send_data_pack,0x00,200); //reset send_data_pack
-			sendlength=0;
-			retry = false;
-		}
+		
 	}
 	
 	while (!nrf_queue_is_empty(&m_buf_queue) && !retry)
@@ -1050,7 +1055,11 @@ void clear_data(void)
 	y = 0;
 	pos_x = 0;
 	pos_y = 0;
+	memset(send_data_pack,0x00,200); //reset send_data_pack
+	sendlength=0;
+
 	nrf_queue_reset( &m_buf_queue );
+	nrf_balloc_init(&m_balloc_AT_pool);
 	
 	m_len_sent = 0;
 	m_cnt_5ms = 0;
