@@ -900,6 +900,7 @@ void ble_data_send_with_queue(void)
 			{
 				count = 0;
 				val = 0;
+				NRF_LOG_ERROR("full package");
 				while(!nrf_queue_is_empty(&m_buf_queue))
 				{
 					val=count*31;
@@ -931,6 +932,7 @@ void ble_data_send_with_queue(void)
 					nrf_balloc_free(&m_balloc_AT_pool, p_buf);
 					count++;
 					sendlength+=31;
+					
 				}
 			
 			}
@@ -939,6 +941,12 @@ void ble_data_send_with_queue(void)
 			  NRF_LOG_ERROR("wrong data");
 				break;
 		 }
+		 /*
+		 else if(sendlength>0x1F)
+		 {
+			NRF_LOG_INFO("LONG DATA");
+		 }
+		 */
 			err_code = ble_nus_data_send(&m_nus, send_data_pack, &sendlength, m_conn_handle);
 			//NRF_LOG_INFO("interrupt_send");
 			if ( (err_code != NRF_ERROR_INVALID_STATE) && (err_code != NRF_ERROR_RESOURCES) &&

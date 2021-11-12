@@ -402,6 +402,7 @@ static void data_print_out()
 			uint8_t data[1024] = {0};
 			uint32_t rtc_dev[4] = {0};
 			uint8_t pos_x = 0;	
+			uint8_t counter = 0;	
 			uint8_t *pbuf =NULL;	
 		
 			ret = nrf_queue_read(&m_buf_queue,&pbuf,1);
@@ -412,27 +413,27 @@ static void data_print_out()
 			
 			if(length==0x1F) 			//length 31  one package 
 			{
-				pos_x=0;
+				counter=0;
 			}
 			else if (length==0x3E)//length 62  two package
 			{
-				pos_x=1;
+				counter=1;
 			}
 			else if (length==0x5D)//length 93  three package
 			{
-				pos_x=2;
+				counter=2;
 			}
 			else if (length==0x7C)//length 124 four package
 			{
-				pos_x=3;
+				counter=3;
 			}
 			else if (length==0x9B)//length 155 five package
 			{
-				pos_x=4;
+				counter=4;
 			}
 			else if (length==0xBA)//length 186 SIX package
 			{
-				pos_x=5;
+				counter=5;
 			}
 			else
 			{
@@ -450,7 +451,7 @@ static void data_print_out()
 			data_len += 11;
 			
 			//取数据包1-4 rtc时间
-			for( uint8_t i = 0; i < pos_x+1; i++ )
+			for( uint8_t i = 0; i < counter+1; i++ )
 			{
 				pos_x = i*31;
 				rtc_dev[i] |= pbuf[5 +pos_x+ 0];
