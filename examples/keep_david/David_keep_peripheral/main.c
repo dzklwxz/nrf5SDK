@@ -126,7 +126,7 @@ static ble_uuid_t m_adv_uuids[]          =                                      
 //david add start 
 NRF_BALLOC_DEF(m_balloc_AT_pool,40,30);
 
-NRF_QUEUE_DEF( uint8_t *, m_buf_queue, 20, NRF_QUEUE_MODE_NO_OVERFLOW );  //¶¨Òå¶ÓÁÐ
+NRF_QUEUE_DEF( uint8_t *, m_buf_queue, 20, NRF_QUEUE_MODE_NO_OVERFLOW );  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 void ble_data_send_with_queue(void);
 void create_data(void);
@@ -135,32 +135,32 @@ uint8_t send_data_pack [200] = {0};
 //david add end 
 
 //Peter add start
-//¶¨Òå¶ÓÁÐ´æ´¢µÄÊý¾Ý½á¹¹
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´æ´¢ï¿½ï¿½ï¿½ï¿½ï¿½Ý½á¹¹
 typedef struct {
     uint8_t * p_data;
     uint16_t length;
 } buffer_t;
-//NRF_QUEUE_DEF( buffer_t, m_buf_queue, 4, NRF_QUEUE_MODE_NO_OVERFLOW );  //¶¨Òå¶ÓÁÐ
-//uint8_t m_data_array[548];  //137*4 = 548  //¶¨Òå¶ÓÁÐ»º´æ´óÐ¡
-uint8_t notify_req;  //Ö÷»úÇëÇó´Ó»únotifyÊý¾Ý´ÎÊý
-uint8_t notify_enable;  //Ö÷»úÊ¹ÄÜ´Ó»únotify
-uint32_t m_len_sent;  //·¢ËÍÊý¾Ý³¤¶È
-uint32_t m_cnt_5ms;  //·¢ËÍÊý¾Ý¼ÆÊ±
-//»º´æÊý¾ÝÌî³äÎ»ÖÃ¼ÆËã±äÁ¿
+//NRF_QUEUE_DEF( buffer_t, m_buf_queue, 4, NRF_QUEUE_MODE_NO_OVERFLOW );  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//uint8_t m_data_array[548];  //137*4 = 548  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡
+uint8_t notify_req;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó»ï¿½notifyï¿½ï¿½ï¿½Ý´ï¿½ï¿½ï¿½
+uint8_t notify_enable;  //ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ü´Ó»ï¿½notify
+uint32_t m_len_sent;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½ï¿½ï¿½
+uint32_t m_cnt_5ms;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¼ï¿½Ê±
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #define DEVICE_ID        (4)  //id = 1-8
-#define DATA_HEAD_LEN 5  //Ò»°üÊý¾ÝÍ·³¤¶È
+#define DATA_HEAD_LEN 5  //Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½
 uint8_t x = 0;  //0-5
 uint8_t y = 0;  //0-3
 uint8_t pos_x = 0;  //DATA_HEAD_LEN + (0-5)*21
 uint8_t pos_y = 0;  //(0-3)*2137
-uint8_t id = 0;  //¼ÇÂ¼Òª·¢ËÍµÄ235×Ö½ÚÊý¾Ý°üID 0-255
-void clear_data(void);  //¶Ï¿ªÁ¬½ÓÊ±£¬Çå¿Õ»º´æÓë±äÁ¿
+uint8_t id = 0;  //ï¿½ï¿½Â¼Òªï¿½ï¿½ï¿½Íµï¿½235ï¿½Ö½ï¿½ï¿½ï¿½ï¿½Ý°ï¿½ID 0-255
+void clear_data(void);  //ï¿½Ï¿ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Õ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //Peter add end
 
 
 //Peter add start
-//ÓÃÀ´¼ÆËã±¾µØÊ±¼ä´Á
-//1ms¶¨Ê±Æ÷£¬×î³¤¶¨Ê±Ê±¼ä0xFFFF ms
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã±¾ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½
+//1msï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½î³¤ï¿½ï¿½Ê±Ê±ï¿½ï¿½0xFFFF ms
 APP_TIMER_DEF( app_timer_rtc_1ms );
 uint32_t rtc_1ms = 0;
 void app_timer_rtc_1ms_handler( void * p_context )
@@ -169,7 +169,7 @@ void app_timer_rtc_1ms_handler( void * p_context )
 	//NRF_LOG_INFO( "%d\r\n", rtc_1ms );
 }
 
-//Æô¶¯¶¨Ê±Æ÷
+//ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
 void app_timer_rtc_1ms_start( void )
 {
 	uint32_t err_code = 0;
@@ -187,7 +187,7 @@ void app_timer_rtc_1ms_start( void )
 	APP_ERROR_CHECK( err_code );
 }
 
-//Í£Ö¹¶¨Ê±Æ÷
+//Í£Ö¹ï¿½ï¿½Ê±ï¿½ï¿½
 void app_timer_rtc_1ms_stop( void )
 {
 	uint32_t err_code = 0;
@@ -199,8 +199,8 @@ void app_timer_rtc_1ms_stop( void )
 
 
 //Peter add start
-//ÓÃÀ´×÷Îª´Ó»ú²úÉúÊý¾ÝµÄ½ÚÅÄ£¬5ms²úÉú38×Ö½ÚÊý¾Ý
-//5ms¶¨Ê±Æ÷£¬×î³¤¶¨Ê±Ê±¼ä0xFFFF ms
+//ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½Ó»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÝµÄ½ï¿½ï¿½Ä£ï¿½5msï¿½ï¿½ï¿½ï¿½38ï¿½Ö½ï¿½ï¿½ï¿½ï¿½ï¿½
+//5msï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½î³¤ï¿½ï¿½Ê±Ê±ï¿½ï¿½0xFFFF ms
 APP_TIMER_DEF( app_timer_rtc_5ms );
 uint8_t rtc_5ms;
 void app_timer_rtc_5ms_handler(void * p_context)
@@ -209,7 +209,7 @@ void app_timer_rtc_5ms_handler(void * p_context)
 	create_data(); // create
 }
 
-//Æô¶¯¶¨Ê±Æ÷
+//ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
 void app_timer_rtc_5ms_start( void )
 {
 	static uint8_t state = 1;
@@ -226,7 +226,7 @@ void app_timer_rtc_5ms_start( void )
 	APP_ERROR_CHECK( err_code );
 }
 
-//Í£Ö¹¶¨Ê±Æ÷
+//Í£Ö¹ï¿½ï¿½Ê±ï¿½ï¿½
 void app_timer_rtc_5ms_stop( void )
 {
 	uint32_t err_code = 0;
@@ -253,9 +253,9 @@ void start_upload_count_handler( void * p_context )
 			err_code = app_timer_stop( start_upload_count );
 			APP_ERROR_CHECK( err_code );
 		
-			notify_enable = 1;  //Ö÷»úÊ¹ÄÜ´Ó»únotify¹¦ÄÜ
-		  app_timer_rtc_1ms_start();  //1ms rtc¶¨Ê±Æ÷Æô¶¯
-		  app_timer_rtc_5ms_start();   //Æô¶¯Êý¾ÝÍ¸´«
+			notify_enable = 1;  //ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ü´Ó»ï¿½notifyï¿½ï¿½ï¿½ï¿½
+		  app_timer_rtc_1ms_start();  //1ms rtcï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		  app_timer_rtc_5ms_start();   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ï¿½
 	}
 
 }
@@ -263,8 +263,8 @@ void start_upload_count_handler( void * p_context )
 //david add end
 
 //Peter add start
-//ÐÂ½¨log´òÓ¡Ä£¿é
-//Í¨¹ý´òÓ¡logµ½fifo£¬ÔÙ´òÓ¡fifo logµ½´®¿Ú£¬½â¾ö×Ô´ølog´òÓ¡ÎÊÌâ
+//ï¿½Â½ï¿½logï¿½ï¿½Ó¡Ä£ï¿½ï¿½
+//Í¨ï¿½ï¿½ï¿½ï¿½Ó¡logï¿½ï¿½fifoï¿½ï¿½ï¿½Ù´ï¿½Ó¡fifo logï¿½ï¿½ï¿½ï¿½ï¿½Ú£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½logï¿½ï¿½Ó¡ï¿½ï¿½ï¿½ï¿½
 #include "app_fifo.h"
 app_fifo_t user_fifo;
 uint8_t fifo_buff[2048] = { 0 };
@@ -376,16 +376,16 @@ static void nus_data_handler(ble_nus_evt_t * p_evt)
 		//NRF_LOG_INFO( p_evt->params.rx_data.p_data, p_evt->params.rx_data.length );
 		if( p_evt->params.rx_data.p_data[0] == 'A' && p_evt->params.rx_data.p_data[1] == 'C' && p_evt->params.rx_data.p_data[2] == 'K' && p_evt->params.rx_data.p_data[3] == '\r' && p_evt->params.rx_data.p_data[4] == '\n')
 		{
-			//notify_req++;  //Ö÷»úÇëÇó´Ó»ú·¢Êý¾Ý´ÎÊý
+			//notify_req++;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý´ï¿½ï¿½ï¿½
 			//NRF_LOG_INFO("notify_req = %d\r\n", notify_req );
 		}
     }
 	else if (p_evt->type == BLE_NUS_EVT_COMM_STARTED)
 	{
 		/*
-		notify_enable = 1;  //Ö÷»úÊ¹ÄÜ´Ó»únotify¹¦ÄÜ
-		app_timer_rtc_1ms_start();  //1ms rtc¶¨Ê±Æ÷Æô¶¯
-		app_timer_rtc_5ms_start();   //Æô¶¯Êý¾ÝÍ¸´«
+		notify_enable = 1;  //ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ü´Ó»ï¿½notifyï¿½ï¿½ï¿½ï¿½
+		app_timer_rtc_1ms_start();  //1ms rtcï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		app_timer_rtc_5ms_start();   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ï¿½
 		*/
 		
 		uint32_t           err_code;
@@ -536,7 +536,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
             m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
             err_code = nrf_ble_qwr_conn_handle_assign(&m_qwr, m_conn_handle);
             APP_ERROR_CHECK(err_code);
-				   // clear_data();  //Çå¿Õ»º´æ
+				   // clear_data();  //ï¿½ï¿½ï¿½Õ»ï¿½ï¿½ï¿½
 				
 			err_code =  sd_ble_gap_tx_power_set(BLE_GAP_TX_POWER_ROLE_CONN,m_conn_handle,RADIO_TXPOWER_TXPOWER_Pos4dBm);
 			APP_ERROR_CHECK(err_code);
@@ -546,9 +546,9 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
             NRF_LOG_INFO("Disconnected");
             // LED indication will be changed when advertising starts.
             m_conn_handle = BLE_CONN_HANDLE_INVALID;
-						app_timer_rtc_1ms_stop();  //Í£Ö¹rtc¶¨Ê±Æ÷
-						app_timer_rtc_5ms_stop();  //Í£Ö¹Í¸´«Êý¾Ý
-						clear_data();  //Çå¿Õ»º´æ
+						app_timer_rtc_1ms_stop();  //Í£Ö¹rtcï¿½ï¿½Ê±ï¿½ï¿½
+						app_timer_rtc_5ms_stop();  //Í£Ö¹Í¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+						clear_data();  //ï¿½ï¿½ï¿½Õ»ï¿½ï¿½ï¿½
             break;
 
         case BLE_GAP_EVT_PHY_UPDATE_REQUEST:
@@ -1052,7 +1052,7 @@ void create_data(void)
 
 
 
-//Í£Ö¹·¢ËÍÊý¾Ý£¬Çå¿Õ»º´æÓë¼ÆÊý
+//Í£Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½Õ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void clear_data(void)
 {
 	notify_req = 0;
@@ -1105,17 +1105,17 @@ int main(void)
     NRF_LOG_INFO("Debug logging for UART over RTT started.");
     advertising_start();
     
-	//user_fifo_init();  //´®¿Ú´òÓ¡»º´æ³õÊ¼»¯
+	//user_fifo_init();  //ï¿½ï¿½ï¿½Ú´ï¿½Ó¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½
     // Enter main loop.
 		//app_timer_rtc_5ms_start();
     for (;;)
     {
-	   // make_data_task();  //²úÉúÊý¾Ý£¬38byte/5ms
-	  //  upload_data_task();  //·¢ËÍÊý¾Ý£¬235byte/5ms  (5 + 38*6  + 2)  //°üÍ·5×Ö½Ú + Êý¾Ý228×Ö½Ú + crc2×Ö½Ú
-	    //user_fifo_task();  //´òÓ¡fifoÖÐµÄlog
+	   // make_data_task();  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½38byte/5ms
+	  //  upload_data_task();  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½235byte/5ms  (5 + 38*6  + 2)  //ï¿½ï¿½Í·5ï¿½Ö½ï¿½ + ï¿½ï¿½ï¿½ï¿½228ï¿½Ö½ï¿½ + crc2ï¿½Ö½ï¿½
+	    //user_fifo_task();  //ï¿½ï¿½Ó¡fifoï¿½Ðµï¿½log
 			
       idle_state_handle();
-			ble_data_send_with_queue();
+      ble_data_send_with_queue();
     }
 }
 

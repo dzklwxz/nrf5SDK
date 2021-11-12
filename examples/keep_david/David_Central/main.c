@@ -403,7 +403,8 @@ static void data_print_out()
 			uint32_t rtc_dev[4] = {0};
 			uint8_t pos_x = 0;	
 			uint8_t counter = 0;	
-			uint8_t *pbuf =NULL;	
+			uint8_t *pbuf =NULL;
+			uint8_t localtime[4] = {0};
 		
 			ret = nrf_queue_read(&m_buf_queue,&pbuf,1);
 			APP_ERROR_CHECK(ret);						
@@ -447,25 +448,48 @@ static void data_print_out()
 			data_len += 2;		
 			
 			//打印主机mtu本地时间
-			sprintf( data + data_len, "%010d ", rtc_1ms );
-			data_len += 11;
-			
+			//sprintf( data + data_len, "%010d ", rtc_1ms );
+			//data_len += 11;
+				localtime[0]=rtc_1ms>>24;
+			  localtime[1]=rtc_1ms>>16;
+			  localtime[2]=rtc_1ms>>8;
+			  localtime[3]=rtc_1ms;
+				for(uint8_t i=0;i<4;i++)
+				{
+					sprintf(data + data_len,"%02X",localtime[i]);
+					data_len += 2;
+				}
+				//print group1
+				for( uint8_t i = 0; i < counter+1; i++ )
+				{
+						pos_x = i*31;	
+					
+					for(uint8_t a = 0; a < 4; a++)
+					{
+						 sprintf( data + data_len, "%02X", pbuf[5+pos_x+a] );
+						 data_len += 2;
+					}	
+						sprintf( data + data_len, " " );
+						data_len += 1;		
+				}
+				
+			/*
 			//取数据包1-4 rtc时间
 			for( uint8_t i = 0; i < counter+1; i++ )
 			{
 				pos_x = i*31;
-				rtc_dev[i] |= pbuf[5 +pos_x+ 0];
+				rtc_dev[i] = pbuf[5 +pos_x+ 0];
 				rtc_dev[i] <<= 8;
-				rtc_dev[i] |= pbuf[5 +pos_x+ 1];
+				rtc_dev[i] = pbuf[5 +pos_x+ 1];
 				rtc_dev[i] <<= 8;
-				rtc_dev[i] |= pbuf[5 +pos_x+ 2];
+				rtc_dev[i] = pbuf[5 +pos_x+ 2];
 				rtc_dev[i] <<= 8;
-				rtc_dev[i] |= pbuf[5 +pos_x+ 3];
+				rtc_dev[i] = pbuf[5 +pos_x+ 3];
 				
 				sprintf( data + data_len, "%010d ", rtc_dev[i] );
 				data_len += 11;
 			}
-			
+			*/
 			
 			/*
 			//打印从机mtu本地时间
@@ -514,7 +538,8 @@ static void ble_nus_chars_received_uart_print()
 					uint8_t dev_id = pbuf[9];
 					//NRF_LOG_RAW_HEXDUMP_INFO(p_data,69);
 					//NRF_LOG_RAW_HEXDUMP_INFO(p_data+69,68);
-							
+					
+						
 							//取数据包1-4 rtc时间
 							for( uint8_t i = 0; i < 1; i++ )
 							{
