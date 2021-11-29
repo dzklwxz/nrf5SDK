@@ -444,6 +444,7 @@ static void data_print_out()
 			}
 		
 	    //打印设备编号
+			
 			sprintf( data, "%d ", pbuf[9] );
 			data_len += 2;		
 			
@@ -459,7 +460,10 @@ static void data_print_out()
 					sprintf(data + data_len,"%02X",localtime[i]);
 					data_len += 2;
 				}
-				//print group1
+				sprintf( data + data_len, " " );
+				data_len += 1;
+/*				
+				//print all the sample in single line
 				for( uint8_t i = 0; i < counter+1; i++ )
 				{
 						pos_x = i*31;	
@@ -473,39 +477,40 @@ static void data_print_out()
 						data_len += 1;		
 				}
 				
-			/*
-			//取数据包1-4 rtc时间
-			for( uint8_t i = 0; i < counter+1; i++ )
-			{
-				pos_x = i*31;
-				rtc_dev[i] = pbuf[5 +pos_x+ 0];
-				rtc_dev[i] <<= 8;
-				rtc_dev[i] = pbuf[5 +pos_x+ 1];
-				rtc_dev[i] <<= 8;
-				rtc_dev[i] = pbuf[5 +pos_x+ 2];
-				rtc_dev[i] <<= 8;
-				rtc_dev[i] = pbuf[5 +pos_x+ 3];
-				
-				sprintf( data + data_len, "%010d ", rtc_dev[i] );
-				data_len += 11;
-			}
-			*/
-			
-			/*
-			//打印从机mtu本地时间
-			for( uint8_t i = 0; i < 1; i ++ )
-			{
-				//打印1 rtc时间
-				sprintf( data + data_len, "%010d ", rtc_dev[i] );
-				data_len += 11;
-			}
-			*/
+		
 				//打印结束符
 			sprintf( data + data_len, "\r\n" );
 			data_len += 2;
 			
 			NRF_LOG_INFO("%s",data);
 			NRF_LOG_FLUSH();
+	*/		
+			
+			
+		
+			//make all the data print out one by one 
+			for(uint8_t i = 0; i < counter+1; i++ )
+			{	
+				uint8_t outputdata[100] = {0};
+				uint8_t outputlength=data_len;
+				memcpy(outputdata,data,outputlength);
+				
+				pos_x = i*31;	
+					
+				for(uint8_t a = 0; a < 4; a++)
+				{
+					 sprintf( outputdata + outputlength, "%02X", pbuf[5+pos_x+a] );
+					 outputlength += 2;
+				}	
+				sprintf( outputdata + outputlength, " " );
+				outputlength += 1;	
+				
+				outputdata[outputlength+1]=0x0D;
+				outputdata[outputlength+1]=0x0A;
+				outputlength += 2;
+			  NRF_LOG_INFO("%s",outputdata);
+			  NRF_LOG_FLUSH();
+			}
 			
 			nrf_balloc_free(&m_balloc_AT_pool, pbuf);
 			
